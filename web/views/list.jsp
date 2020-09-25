@@ -14,32 +14,41 @@
             margin: auto;
         }
 
-        table, tr, td {
-            width: 1000px;
-            height: 100px;
+        table,tr, td {
+            height: 30px;
             border: 1px solid black;
+        }
+
+        td{
+            width:100px;
+        }
+        #table {
+            text-align: center;
+            margin: auto;
+            width: 600px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-1.11.3.js"
             type="text/javascript"></script>
 
     <script type="text/javascript">
-        function ShowDetail(articleNum){
-            location.href="detail?num="+articleNum;
+        function ShowDetail(articleNum) {
+            location.href = "detail.do?num=" + articleNum;
         }
-        $(document).ready(function ()
-        {
-            $('tr').hover(function(){
-                $(this).css('color','blue');
-            }, function() {
-                $(this).css('color','black');
+
+        $(document).ready(function () {
+            $('tr').hover(function () {
+                $(this).css('color', 'blue');
+            }, function () {
+                $(this).css('color', 'black');
             });
         });
     </script>
 </head>
-<body>
 <h1>GitHub 커밋테스트!</h1>
-<div>
+<br/>
+<body>
+<div id="table">
     <table>
         <tr>
             <td>글번호</td>
@@ -50,9 +59,9 @@
         </tr>
         <%
             if (list.size() > 0) {
-                for(int i = 0; i < list.size(); i++) {
+                for (int i = 0; i < list.size(); i++) {
         %>
-        <tr onclick="ShowDetail(<%=list.get(i).getArticleNum()%>)" >
+        <tr onclick="ShowDetail(<%=list.get(i).getArticleNum()%>)">
             <td><%=list.get(i).getArticleNum()%>
             </td>
             <td>
@@ -78,14 +87,12 @@
         <%
             }
         %>
-        <form action="add" method="post">
-            글제목: <input type="text" name="subject"/><br/>
-            글내용: <input type="text" name="content"/><br/>
-            <input type="submit" value="글쓰기"/>
-        </form>
-
     </table>
-
+    <br/>
+    <form action="/views/writeForm.jsp">
+        <input type="submit" value="글쓰기"/>
+    </form>
 </div>
+
 </body>
 </html>

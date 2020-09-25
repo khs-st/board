@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ArticleListAction implements Action {
     @Override
-    public ActionForward execute(HttpServletRequest request, HttpServletResponse response){
+    public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
         BoardService svc=new BoardService();
         ArrayList<ArticleVO> articleList=svc.getArticleList();
         ActionForward forward=new ActionForward();

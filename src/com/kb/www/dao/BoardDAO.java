@@ -5,7 +5,10 @@ import com.kb.www.vo.ArticleVO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 
 import static com.kb.www.common.JdbcUtil.close;
 import static com.kb.www.common.JdbcUtil.commit;
@@ -57,14 +60,15 @@ public class BoardDAO {
         return list;
     }
 
-    public ArticleVO getArticleDetail(String num) {
+    public ArticleVO getArticleDetail(int num) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        ArticleVO vo2 = new ArticleVO();
+        ArticleVO vo2 = null;
         try {
             pstmt = con.prepareStatement("select * from boardtest where num=" + num);
             rs = pstmt.executeQuery();
             while (rs.next()) {
+                vo2 = new ArticleVO();
                 vo2.setArticleNum(rs.getInt("num"));
                 vo2.setArticleTitle(rs.getString("subject"));
                 vo2.setArticleContent(rs.getString("content"));
@@ -78,18 +82,55 @@ public class BoardDAO {
         return vo2;
     }
 
-    public void getWriteArticle(String subject,String content) {
+    public int insertArticle(ArticleVO vo) {
         PreparedStatement pstmt = null;
+        int count = 0;
         try {
             pstmt = con.prepareStatement("insert into boardtest (subject, content) values(?,?)");
-            pstmt.setString(1,subject);
-            pstmt.setString(2,content);
-            pstmt.executeUpdate();
+            pstmt.setString(1, vo.getArticleTitle());
+            pstmt.setString(2, vo.getArticleContent());
+            count = pstmt.executeUpdate();
             commit(con);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(pstmt);
         }
+        return count;
+    }
+
+    public int deleteArticle(int num) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("delete from boardtest where num=?");
+            pstmt.setInt(1, num);
+            count = pstmt.executeUpdate();
+            commit(con);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(pstmt);
+        }
+        return count;
+    }
+
+    public int updateArticle(ArticleVO vo) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("update boardtest set subject=?, content=? where num=?");
+            pstmt.setString(1, vo.getArticleTitle());
+            pstmt.setString(2, vo.getArticleContent());
+            //pstmt.setString(3, new SimpleDateFormat("yyyy-mm-dd HH:mm").format(new Date()));
+            pstmt.setInt(3,vo.getArticleNum());
+            count = pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(pstmt);
+        }
+        return count;
     }
 }

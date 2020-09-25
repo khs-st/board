@@ -1,7 +1,6 @@
 package com.kb.www.controller;
 
-import com.kb.www.atcion.ArticleListAction;
-import com.kb.www.atcion.DetailAction;
+import com.kb.www.atcion.ArticleDetailAction;
 import com.kb.www.common.Action;
 import com.kb.www.common.ActionForward;
 
@@ -19,7 +18,7 @@ public class DetailController extends HttpServlet {
         //TODO Auto-generated method stub
         request.setCharacterEncoding("UTF-8");
         ActionForward forward = null;
-        Action detailaction = new DetailAction();
+        Action detailaction = new ArticleDetailAction();
         //이벤트 처리 콘트롤러
         try {
             forward = detailaction.execute(request, response);
