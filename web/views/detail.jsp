@@ -37,6 +37,8 @@
             <td>글 번호</td>
             <td>글 제목</td>
             <td>글 내용</td>
+            <td>작성 날짜</td>
+            <td>수정 날짜</td>
         </tr>
         <tr>
             <td><%=vo2.getArticleNum()%>
@@ -46,6 +48,12 @@
             </td>
             <td>
                 <%=vo2.getArticleContent()%>
+            </td>
+            <td>
+                <%=vo2.getWriteDate()%>
+            </td>
+            <td>
+                <%=vo2.getUpdateDate()%>
             </td>
         </tr>
     </table>

@@ -1,5 +1,6 @@
 package com.kb.www.controller;
 
+import com.kb.www.action.ArticleWriteAction;
 import com.kb.www.atcion.*;
 import com.kb.www.common.Action;
 import com.kb.www.common.ActionForward;
@@ -47,6 +48,14 @@ public class BoardController extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        else if(command.equals("/write.do")){
+            action=new ArticleWriteAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         else if(command.equals("/delete.do")){
             action=new ArticleDeleteAction();
             try {
@@ -65,6 +74,47 @@ public class BoardController extends HttpServlet {
         }
         else if(command.equals("/updatePro.do")){
             action=new ArticleUpdateProAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        else if(command.equals("/join.do")){
+            action=new MemberJoinFormAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(command.equals("/joinProc.do")){
+            action=new MemberJoinProcAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(command.equals("/login.do")){
+            action=new MemberLoginFormAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(command.equals("/loginProc.do")){
+            action=new MemberLoginProcAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if(command.equals("/logout.do")){
+            action=new MemberLogoutAction();
             try {
                 forward = action.execute(request, response);
             } catch (Exception e) {

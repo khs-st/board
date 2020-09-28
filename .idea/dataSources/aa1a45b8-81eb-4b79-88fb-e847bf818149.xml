@@ -1104,50 +1104,147 @@
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
     <table id="276" parent="3" name="boardtest"/>
-    <column id="277" parent="276" name="num">
+    <table id="277" parent="3" name="member"/>
+    <table id="278" parent="3" name="member_history"/>
+    <column id="279" parent="276" name="num">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="278" parent="276" name="subject">
+    <column id="280" parent="276" name="mb_sq">
       <Position>2</Position>
+      <DataType>int|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="281" parent="276" name="subject">
+      <Position>3</Position>
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="279" parent="276" name="content">
-      <Position>3</Position>
+    <column id="282" parent="276" name="content">
+      <Position>4</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="280" parent="276" name="hit">
-      <Position>4</Position>
+    <column id="283" parent="276" name="hit">
+      <Position>5</Position>
       <DataType>int|0s</DataType>
       <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="281" parent="276" name="wdate">
-      <Position>5</Position>
+    <column id="284" parent="276" name="wdate">
+      <Position>6</Position>
       <DataType>datetime|0s</DataType>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="282" parent="276" name="udate">
-      <Position>6</Position>
-      <DataType>datetime|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="283" parent="276" name="ddate">
+    <column id="285" parent="276" name="udate">
       <Position>7</Position>
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="284" parent="276" name="PRIMARY">
+    <column id="286" parent="276" name="ddate">
+      <Position>8</Position>
+      <DataType>datetime|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="287" parent="276" name="boardtest_member_mb_sq_fk">
+      <ColNames>mb_sq</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="288" parent="276" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>num</ColNames>
       <Primary>1</Primary>
     </key>
+    <foreign-key id="289" parent="276" name="boardtest_member_mb_sq_fk">
+      <ColNames>mb_sq</ColNames>
+      <RefSchemaName>kb</RefSchemaName>
+      <RefTableName>member</RefTableName>
+      <RefColNames>mb_sq</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>set-null</OnDelete>
+    </foreign-key>
+    <column id="290" parent="277" name="mb_sq">
+      <Position>1</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="291" parent="277" name="mb_id">
+      <Position>2</Position>
+      <DataType>varchar(50)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="292" parent="277" name="mb_pw">
+      <Position>3</Position>
+      <DataType>varchar(200)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="293" parent="277" name="login_st">
+      <Position>4</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="294" parent="277" name="leave_fl">
+      <Position>5</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="295" parent="277" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>mb_sq</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="296" parent="278" name="sq">
+      <Position>1</Position>
+      <DataType>int|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="297" parent="278" name="mb_sq">
+      <Position>2</Position>
+      <DataType>int|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="298" parent="278" name="evt_type">
+      <Position>3</Position>
+      <DataType>tinyint|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="299" parent="278" name="dttm">
+      <Position>4</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="300" parent="278" name="member_history_member_mb_sq_fk">
+      <ColNames>mb_sq</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="301" parent="278" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>sq</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="302" parent="278" name="member_history_member_mb_sq_fk">
+      <ColNames>mb_sq</ColNames>
+      <RefSchemaName>kb</RefSchemaName>
+      <RefTableName>member</RefTableName>
+      <RefColNames>mb_sq</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>set-null</OnDelete>
+    </foreign-key>
   </database-model>
 </dataSource>

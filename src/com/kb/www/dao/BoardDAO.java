@@ -1,6 +1,8 @@
 package com.kb.www.dao;
 
 import com.kb.www.vo.ArticleVO;
+import com.kb.www.vo.MemberHisoryVO;
+import com.kb.www.vo.MemberVO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,7 +40,17 @@ public class BoardDAO {
         ResultSet rs = null;
         ArrayList<ArticleVO> list = new ArrayList<ArticleVO>();
         try {
-            pstmt = con.prepareStatement("select * from boardtest");
+            pstmt = con.prepareStatement("select " +
+                    "b.num" +
+                    ",m.mb_id," +
+                    "       b.subject," +
+                    "       b.content," +
+                    "       b.hit," +
+                    "       b.wdate," +
+                    "       b.udate," +
+                    "       b.ddate" +
+                    " from boardtest b" +
+                    "inner join member m on b.mb_sq = m.mb_sq");
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 ArticleVO vo = new ArticleVO();
@@ -49,6 +61,7 @@ public class BoardDAO {
                 vo.setWriteDate(rs.getString("wdate"));
                 vo.setUpdateDate(rs.getString("udate"));
                 vo.setDeleteDate(rs.getString("ddate"));
+                vo.setId(rs.getString("id"));
                 list.add(vo);
             }
         } catch (Exception e) {
@@ -72,6 +85,8 @@ public class BoardDAO {
                 vo2.setArticleNum(rs.getInt("num"));
                 vo2.setArticleTitle(rs.getString("subject"));
                 vo2.setArticleContent(rs.getString("content"));
+                vo2.setWriteDate(rs.getString("wdate"));
+                vo2.setUpdateDate(rs.getString("udate"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,9 +101,10 @@ public class BoardDAO {
         PreparedStatement pstmt = null;
         int count = 0;
         try {
-            pstmt = con.prepareStatement("insert into boardtest (subject, content) values(?,?)");
-            pstmt.setString(1, vo.getArticleTitle());
-            pstmt.setString(2, vo.getArticleContent());
+            pstmt = con.prepareStatement("insert into boardtest (mb_sq,subject, content) values(?,?,?)");
+            pstmt.setInt(1, vo.getMb_sq());
+            pstmt.setString(2, vo.getArticleTitle());
+            pstmt.setString(3, vo.getArticleContent());
             count = pstmt.executeUpdate();
             commit(con);
         } catch (Exception e) {
@@ -117,15 +133,112 @@ public class BoardDAO {
 
     public int updateArticle(ArticleVO vo) {
         PreparedStatement pstmt = null;
+        String NowDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        vo.setUpdateDate(NowDate);
         int count = 0;
         try {
-            pstmt = con.prepareStatement("update boardtest set subject=?, content=? where num=?");
+            pstmt = con.prepareStatement("update boardtest set subject=?, content=?, udate=? where num=?");
             pstmt.setString(1, vo.getArticleTitle());
             pstmt.setString(2, vo.getArticleContent());
+            pstmt.setString(3, vo.getUpdateDate());
             //pstmt.setString(3, new SimpleDateFormat("yyyy-mm-dd HH:mm").format(new Date()));
-            pstmt.setInt(3,vo.getArticleNum());
+            pstmt.setInt(4, vo.getArticleNum());
             count = pstmt.executeUpdate();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(pstmt);
+        }
+        return count;
+    }
+
+    //Member
+    public int insertMember(MemberVO memberVO) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("insert into member(mb_id, mb_pw) values(?,?)");
+            pstmt.setString(1, memberVO.getMb_id());
+            pstmt.setString(2, memberVO.getMb_pwd());
+            count = pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(pstmt);
+        }
+        return count;
+    }
+
+    public int getMemberSequence(String id) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int mb_sq = 0;
+        try {
+            pstmt = con.prepareStatement("select mb_sq from member where mb_id=?");
+            pstmt.setString(1, id);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                mb_sq = rs.getInt("mb_sq");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(pstmt);
+        }
+        return mb_sq;
+    }
+
+    public int insertMemberHistory(MemberHisoryVO memberHisoryVO) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("insert into member_history (mb_sq,evt_type) values (?,?)");
+            pstmt.setInt(1, memberHisoryVO.getMb_sq());
+            pstmt.setInt(2, memberHisoryVO.getEvt_type());
+            count = pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(pstmt);
+        }
+        return count;
+    }
+
+    public MemberVO getMember(String id) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        MemberVO vo = null;
+        try {
+            //binary는 대소문자 구분 mysqldb는 대소문자 구분해야함
+            pstmt = con.prepareStatement("select mb_sq,mb_id,mb_pw from member where binary(mb_id)=?");
+            pstmt.setString(1, id);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                vo = new MemberVO();
+                vo.setMb_sq(rs.getInt("mb_sq"));
+                vo.setMb_id(rs.getString("mb_id"));
+                vo.setMb_pwd(rs.getString("mb_pw"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(pstmt);
+        }
+        return vo;
+    }
+
+    public int updateLoginState(MemberVO memberVO) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("update member set login_st=? where mb_sq=?");
+            pstmt.setBoolean(1, memberVO.isLogin_st());
+            pstmt.setInt(2, memberVO.getMb_sq());
+            count = pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

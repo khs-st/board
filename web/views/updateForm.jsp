@@ -38,6 +38,7 @@
 <form action="/updatePro.do" method="post" onsubmit="return checkData()">
     글 제목 <input type="text" name="subject" id="subject" MAXLENGTH="100" value="<%=vo.getArticleTitle()%>"><<br/>
     글 내용 <textarea name="content" id="content" cols="30" rows="10" ><%=vo.getArticleContent()%></textarea><br/>
+
     <input type="hidden" name="num" value="<%=vo.getArticleNum()%>">
     <input type="submit" value="글수정">
 </form>

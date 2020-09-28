@@ -3,6 +3,27 @@ package com.kb.www.vo;
 public class ArticleVO {
     //글 번호
     private int ArticleNum;
+    //작성자
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private int mb_sq;
+
+    public int getMb_sq() {
+        return mb_sq;
+    }
+
+    public void setMb_sq(int mb_sq) {
+        this.mb_sq = mb_sq;
+    }
+
     //글 제목
     private String ArticleTitle;
     //글 내용
