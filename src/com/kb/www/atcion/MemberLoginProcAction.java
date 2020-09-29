@@ -62,8 +62,6 @@ public class MemberLoginProcAction implements Action {
         //세션은 request에 담겨있음
         HttpSession session=request.getSession();
         lm.setSession(session,memberVO.getMb_id());
-
-
         ActionForward forward = new ActionForward();
         forward.setPath("/");
         forward.setRedirect(true);

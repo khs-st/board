@@ -27,7 +27,14 @@ public class BoardService {
         BoardDAO dao = BoardDAO.getInstance();
         Connection con = getConnection();
         dao.setConnection(con);
-        ArticleVO article = dao.getArticleDetail(num);
+        ArticleVO article = null;
+        int count = dao.updateHitCount(num);
+        if (count > 0) {
+            commit(con);
+            article = dao.getArticleDetail(num);
+        } else {
+            rollback(con);
+        }
         close(con);
         return article;
     }
@@ -166,8 +173,33 @@ public class BoardService {
         Connection con = getConnection();
         dao.setConnection(con);
         //isSucess만든이유: count로 넘기면 boolean타입도 바꾸고 데이터가 잘안나옴. 디자인패턴 적용위해서
-        int sq=dao.getMemberSequence(id);
+        int sq = dao.getMemberSequence(id);
         close(con);
         return sq;
     }
+
+    public String getWriterId(int num) {
+        BoardDAO dao = BoardDAO.getInstance();
+        Connection con = getConnection();
+        dao.setConnection(con);
+        //isSucess만든이유: count로 넘기면 boolean타입도 바꾸고 데이터가 잘안나옴. 디자인패턴 적용위해서
+        String id = dao.getWriterId(num);
+        close(con);
+        return id;
+    }
+
+    //Member History
+    public ArrayList<MemberHisoryVO> getMemberHistory(String id) {
+        BoardDAO dao = BoardDAO.getInstance();
+        //JdbcUtil의 getConnection을 이용해서 mysqldb와 연결
+        Connection con = getConnection();
+        //dao와 mysqldb의 데이터를 con을 이용해서 공유
+        dao.setConnection(con);
+        ArrayList<MemberHisoryVO> list = dao.getMemberHistory(id);
+        close(con);
+        return list;
+    }
+
+    //회원탈퇴
+
 }

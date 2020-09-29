@@ -30,10 +30,8 @@
     비밀번호: <input type="password" name="pwd" id="pwd"><br/>
     <br/>
     <input type="submit" value="로그인">
-
+    <br/>
+    <button type="button" onclick="location.href='/'">취소</button>
 </form>
-<br/>
-<button onclick="location.href='/'">취소</button>
-
 </body>
 </html>

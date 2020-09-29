@@ -2,6 +2,7 @@ package com.kb.www.atcion;
 
 import com.kb.www.common.Action;
 import com.kb.www.common.ActionForward;
+import com.kb.www.common.LoginManager;
 import com.kb.www.common.RegExp;
 import com.kb.www.service.BoardService;
 import com.kb.www.vo.ArticleVO;
@@ -18,6 +19,15 @@ public class ArticleUpdateAction implements Action {
             throws Exception {
         BoardService svc = new BoardService();
         String num = request.getParameter("num");
+        LoginManager lm=LoginManager.getInstance();
+        String id=lm.getMemberId(request.getSession());
+        if(id==null){
+            response.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('잘못된 접근입니다.');location.href='/';</script>");
+            out.close();
+            return null;
+        }
         //sce개념 null검사부터 해야함. 만약 안하면 프로그램이 멈춘다.
         //중요!!!!!! 정규표현식 검사하는 클래스파일 만들어 한번에 사용하기 RegExp클래스파일로 사용
         if (num == null ||num.equals("")||

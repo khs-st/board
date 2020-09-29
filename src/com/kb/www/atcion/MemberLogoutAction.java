@@ -11,9 +11,8 @@ import com.kb.www.vo.MemberVO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.PrintWriter;
 
-import static com.kb.www.constants.Constants.MEMBER_HISTORY_EVENT_LOGIN;
+
 import static com.kb.www.constants.Constants.MEMBER_HISTORY_EVENT_LOGOUT;
 
 

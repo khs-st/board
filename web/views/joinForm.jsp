@@ -66,7 +66,7 @@
     <br/>
     <input type="submit" value="회원가입">
     <br/>
-    <button onclick="location.href='/'">취소</button>
+    <button type="button" onclick="location.href='/'">취소</button>
 </form>
 </body>
 </html>

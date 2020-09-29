@@ -53,7 +53,6 @@
         <tr>
             <td>글번호</td>
             <td>글제목</td>
-            <td>글내용</td>
             <td>작성자</td>
             <td>조회수</td>
             <td>작성일자</td>
@@ -67,9 +66,6 @@
             </td>
             <td>
                 <%=list.get(i).getArticleTitle()%>
-            </td>
-            <td>
-                <%=list.get(i).getArticleContent()%>
             </td>
             <td>
                 <%=list.get(i).getId()%>
@@ -86,7 +82,7 @@
         } else {
         %>
         <tr>
-            <td colspan="4">게시글이 없습니다.</td>
+            <td colspan="6">게시글이 없습니다.</td>
         </tr>
         <%
             }

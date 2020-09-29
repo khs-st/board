@@ -40,28 +40,25 @@ public class BoardDAO {
         ResultSet rs = null;
         ArrayList<ArticleVO> list = new ArrayList<ArticleVO>();
         try {
-            pstmt = con.prepareStatement("select " +
-                    "b.num" +
+            pstmt = con.prepareStatement("select " + "b.num" +
                     ",m.mb_id," +
-                    "       b.subject," +
-                    "       b.content," +
-                    "       b.hit," +
-                    "       b.wdate," +
-                    "       b.udate," +
-                    "       b.ddate" +
+                    "b.subject," +
+                    "b.hit," +
+                    "b.wdate," +
+                    "b.udate," +
+                    "b.ddate" +
                     " from boardtest b" +
-                    "inner join member m on b.mb_sq = m.mb_sq");
+                    " inner join member m on b.mb_sq = m.sq");
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 ArticleVO vo = new ArticleVO();
                 vo.setArticleNum(rs.getInt("num"));
                 vo.setArticleTitle(rs.getString("subject"));
-                vo.setArticleContent(rs.getString("content"));
                 vo.setHit(rs.getInt("hit"));
                 vo.setWriteDate(rs.getString("wdate"));
                 vo.setUpdateDate(rs.getString("udate"));
                 vo.setDeleteDate(rs.getString("ddate"));
-                vo.setId(rs.getString("id"));
+                vo.setId(rs.getString("mb_id"));
                 list.add(vo);
             }
         } catch (Exception e) {
@@ -78,15 +75,31 @@ public class BoardDAO {
         ResultSet rs = null;
         ArticleVO vo2 = null;
         try {
-            pstmt = con.prepareStatement("select * from boardtest where num=" + num);
+            pstmt = con.prepareStatement("select" +
+                    " b.num" +
+                    ", b.mb_sq" +
+                    ", b.subject" +
+                    ", b.content" +
+                    ", b.hit" +
+                    ", b.wdate" +
+                    ", b.udate" +
+                    ", b.ddate" +
+                    ", m.mb_id" +
+                    " from boardtest b" +
+                    " inner join member m on b.mb_sq = m.sq" +
+                    " where num=?");
+            pstmt.setInt(1, num);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 vo2 = new ArticleVO();
                 vo2.setArticleNum(rs.getInt("num"));
                 vo2.setArticleTitle(rs.getString("subject"));
                 vo2.setArticleContent(rs.getString("content"));
+                vo2.setHit(rs.getInt("hit"));
                 vo2.setWriteDate(rs.getString("wdate"));
                 vo2.setUpdateDate(rs.getString("udate"));
+                vo2.setDeleteDate(rs.getString("ddate"));
+                vo2.setId(rs.getString("mb_id"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,6 +109,23 @@ public class BoardDAO {
         }
         return vo2;
     }
+
+    //조회수
+    public int updateHitCount(int num) {
+        PreparedStatement pstmt = null;
+        int count = 0;
+        try {
+            pstmt = con.prepareStatement("update boardtest set hit=hit+1 where num=?");
+            pstmt.setInt(1, num);
+            count = pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            close(pstmt);
+        }
+        return count;
+    }
+
 
     public int insertArticle(ArticleVO vo) {
         PreparedStatement pstmt = null;
@@ -175,11 +205,11 @@ public class BoardDAO {
         ResultSet rs = null;
         int mb_sq = 0;
         try {
-            pstmt = con.prepareStatement("select mb_sq from member where mb_id=?");
+            pstmt = con.prepareStatement("select sq from member where mb_id=?");
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                mb_sq = rs.getInt("mb_sq");
+                mb_sq = rs.getInt("sq");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,12 +243,12 @@ public class BoardDAO {
         MemberVO vo = null;
         try {
             //binary는 대소문자 구분 mysqldb는 대소문자 구분해야함
-            pstmt = con.prepareStatement("select mb_sq,mb_id,mb_pw from member where binary(mb_id)=?");
+            pstmt = con.prepareStatement("select sq,mb_id,mb_pw from member where binary(mb_id)=?");
             pstmt.setString(1, id);
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 vo = new MemberVO();
-                vo.setMb_sq(rs.getInt("mb_sq"));
+                vo.setMb_sq(rs.getInt("sq"));
                 vo.setMb_id(rs.getString("mb_id"));
                 vo.setMb_pwd(rs.getString("mb_pw"));
             }
@@ -235,7 +265,7 @@ public class BoardDAO {
         PreparedStatement pstmt = null;
         int count = 0;
         try {
-            pstmt = con.prepareStatement("update member set login_st=? where mb_sq=?");
+            pstmt = con.prepareStatement("update member set login_st=? where sq=?");
             pstmt.setBoolean(1, memberVO.isLogin_st());
             pstmt.setInt(2, memberVO.getMb_sq());
             count = pstmt.executeUpdate();
@@ -246,4 +276,52 @@ public class BoardDAO {
         }
         return count;
     }
+
+    public String getWriterId(int num) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String id = null;
+        try {
+            pstmt = con.prepareStatement("select m.mb_id from boardtest b inner join member m on b.mb_sq = m.sq where num=?");
+            pstmt.setInt(1, num);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                id = rs.getString("mb_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(pstmt);
+        }
+        return id;
+    }
+
+    public ArrayList<MemberHisoryVO> getMemberHistory(String id) {
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        ArrayList<MemberHisoryVO> list = new ArrayList<MemberHisoryVO>();
+        try {
+            pstmt = con.prepareStatement("select" +
+                    " mh.evt_type, mh.dttm" +
+                    " from member m" +
+                    " left join member_history mh on m.sq=mh.mb_sq" +
+                    " where mb_id=?");
+            pstmt.setString(1, id);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                MemberHisoryVO vo = new MemberHisoryVO();
+                vo.setEvt_type(rs.getInt("evt_type"));
+                vo.setDttm(rs.getString("dttm"));
+                list.add(vo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(rs);
+            close(pstmt);
+        }
+        return list;
+    }
+
 }

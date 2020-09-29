@@ -1164,11 +1164,11 @@
       <ColNames>mb_sq</ColNames>
       <RefSchemaName>kb</RefSchemaName>
       <RefTableName>member</RefTableName>
-      <RefColNames>mb_sq</RefColNames>
+      <RefColNames>sq</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="290" parent="277" name="mb_sq">
+    <column id="290" parent="277" name="sq">
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
@@ -1201,7 +1201,7 @@
     </column>
     <key id="295" parent="277" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>mb_sq</ColNames>
+      <ColNames>sq</ColNames>
       <Primary>1</Primary>
     </key>
     <column id="296" parent="278" name="sq">
@@ -1242,7 +1242,7 @@
       <ColNames>mb_sq</ColNames>
       <RefSchemaName>kb</RefSchemaName>
       <RefTableName>member</RefTableName>
-      <RefColNames>mb_sq</RefColNames>
+      <RefColNames>sq</RefColNames>
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>

@@ -121,6 +121,15 @@ public class BoardController extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        else if(command.equals("/history.do")){
+            action=new MemberHistoryAction();
+            try {
+                forward = action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (forward != null) {
             if (forward.isRedirect()) {
                 response.sendRedirect(forward.getPath());
